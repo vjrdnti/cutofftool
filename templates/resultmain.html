@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+        }
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 10px;
+            padding: 20px;
+            width: calc(33.333% - 40px); /* 3 cards per row */
+            box-sizing: border-box;
+        }
+        .card h3 {
+            margin-top: 0;
+        }
+        .card p {
+            margin: 5px 0;
+        }
+        @media (max-width: 768px) {
+            .card {
+                width: calc(50% - 40px); /* 2 cards per row for tablets */
+            }
+        }
+        @media (max-width: 480px) {
+            .card {
+                width: calc(100% - 40px); /* 1 card per row for mobile */
+            }
+        }
+        .blur-overlay {
+            position: absolute;
+            top: 10;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1;
+        }
+        .blurred {
+            filter: blur(5px);
+        }
+        .hidden {
+            display: none;
+        }
+        #paycard{
+        	position: absolute;
+        	top: 420px;
+        	background: rgba(255, 255, 255, 1);
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    
+</head>
+<body>
+    <h2>Data on preference</h2>
+    <div class="container" id="cardContainer">
+        {% for row in data %}
+        <div class="card{% if loop.index > 3 %} blurred{% endif %}">
+            <h3>Option {{ loop.index }}</h3>
+           	<!--<p><strong>rowdata:</strong> {{ row }}</p>-->
+            <p><strong>Name:</strong> {{ row['Institute Name'] }}</p>
+            <p><strong>Percentile:</strong> {{ row['percentile'] }}</p>
+            <p><strong><a href="https://cetcell.mahacet.org/search-institute-deatils/?getinstitutecode={{ row['College Code'] }}">Link</a></strong></p>
+            <p><strong>Degree:</strong> {{ row['Course Name'] }}</p>
+            <p><strong>Branch:</strong> {{ row['Branch Name'] }}</p>
+            <p><strong>Category:</strong> {{ row['Category'] }}</p>
+            <p><strong>District:</strong> {{ row['District'] }}</p>
+        </div>
+        {% endfor %}
+        <div class="blur-overlay" id="payOverlay">
+         <div class="card" id="paycard">
+           <form>
+           <h2>Login to View More</h2>
+           <div class="form-group">
+            <label for="username">username</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        	</div>
+        	<div class="form-group">
+            <label for="password">password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        	</div>
+           </form>
+        <button onclick="Login()" class="btn btn-primary" id="loginnow" action=''>login</button>   
+        </div>
+        </div>
+    </div>
+
+    <script>
+        function Login() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            //const fs = require('fs');
+			//const papa = require('papaparse');
+			//const file = fs.createReadStream('../credentials.csv');
+			//console.log(file);
+            //Papa.parse(file, {
+              //  download: true,
+              //  header: true,
+              //  complete: function(results) {
+                //    var users = results.data;
+                  //  console.log(users);
+                    //var isValid = users.some(function(user) {
+                    	//console.log(user.username);
+                    	//console.log(user.password);
+                        //return user.username === username && user.password === password;
+                    //});
+
+                    //if (isValid) {
+                      //  var overlay = document.getElementById('payOverlay');
+                        //var cards = document.querySelectorAll('.card.blurred');
+                        //overlay.style.display = 'none';
+                        //cards.forEach(function(card) {
+                          //  card.classList.remove('blurred');
+                        //});
+                        //alert('login successful!');
+                    //} else {
+                    	
+                      //  alert('Invalid username or password!');
+                    //}
+                //},
+                //error: function(error) {
+                  //  console.error('Error parsing CSV:', error);
+                //    alert('An error occurred while verifying credentials.');
+              //  }
+            //});
+            if ('admin' === username && 'vmpw' === password){
+            var isValid = 1;
+            } else{
+            var isValid = 0;
+            }
+
+        if (isValid==1) {
+            var overlay = document.getElementById('payOverlay');
+            var cards = document.querySelectorAll('.card.blurred');
+            overlay.style.display = 'none';
+            cards.forEach(function(card) {
+                card.classList.remove('blurred');
+            });
+            alert('login successful!');
+        } else {
+        	
+            alert('Invalid username or password!');
+        }
+        };
+    </script>
+</body>
+</html>
+
